@@ -42,7 +42,7 @@ QuestionBoard.prototype = {
     this.recordCounter = 0;
     this.optionACounter = 0;
     this.optionBCounter = 0;
-    this.optionCounterDate = this._getDay()
+    this.counterDate = this._getDay()
   },
   // 付钱参与
   participate:function(opt){
@@ -112,15 +112,15 @@ QuestionBoard.prototype = {
   },
 
   _nextOptionACounter:function(){
-      return this.optionACounter++;
+      return this.optionACounter+1;
   },
   _nextOptionBCounter:function() {
-      return this.optionBCounter++;
+      return this.optionBCounter+1;
   },
   _resetCounter:function(date){
         this.optionACounter = 0;
         this.optionBCounter = 0;
-        this.optionCounterDate = date;
+        this.counterDate = date;
   },
   //领钱
   distribution:function(){
@@ -129,11 +129,10 @@ QuestionBoard.prototype = {
   	// }
     var today = this._getDay();
     
-    if(this.optionCounterDate !== today){
+    if(this.counterDate != today){
         this._resetCounter(today);
-        throw new Error("no member played today!");;
+        throw new Error("no member played today!++++");;
     }  
-    var today = this._getDay();
     //1. 少数派选项0 or 1
     var minorityOpt = -1; //相等就平分
     var optEqual = false;
@@ -164,7 +163,8 @@ QuestionBoard.prototype = {
     }
     
     if( memberSum == 0){
-        throw new Error("no member played today!");
+        // 少数派没有人        
+       return 'no one win';
     }
     var every = (sum/memberSum).toFixed(4);
 
@@ -173,7 +173,10 @@ QuestionBoard.prototype = {
   	}
 
   	this.jackpot -= sum;
-  	return "success";
+  	return JSON.stringify({
+          every:every,
+          addressList:addressList,
+      });
   },
 
   // 付过钱的用户
@@ -207,7 +210,8 @@ QuestionBoard.prototype = {
 
  module.exports = QuestionBoard;
 
- // n1pVgCLbfTmTCWZDZiEmYcwBmYuWaU18Qgm
+ // mainnet:n1drkV289eit16xSpkhxc5oNe5h3XBMq8jk
+ // testnet:n1pLXYPdHo8UrscUdUXKATWj6hSTEEZzLwY
 
  //9z
- //6d9fe21c94564d8210fc203079c9bc4e05167261f1c462abe239e8d722bc6607
+ //eaebed510a9be18f757712aaaf047f8ac427bf74f944ded62c4df383ce673904
