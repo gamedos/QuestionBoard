@@ -124,14 +124,10 @@ QuestionBoard.prototype = {
   },
   //领钱
   distribution:function(){
-  	// if(this._getHour < 21){
-  	// 	throw new Error('can not pull money befor 9:00pm !');
-  	// }
     var today = this._getDay();
-    
     if(this.counterDate != today){
         this._resetCounter(today);
-        throw new Error("no member played today!++++");;
+        throw new Error("no member played today!");;
     }  
     //1. 少数派选项0 or 1
     var minorityOpt = -1; //相等就平分
@@ -155,43 +151,47 @@ QuestionBoard.prototype = {
         if(item.payDay == today && item.tag ==1){
             item.tag = 2;
             this.mainBoard.put(item.idx,item);
-            sum += item.payMuch;
+            sum = sum.plus(item.payMuch);
             if(isPayBack){
                 addressList.push(item.from); 
             }
         }
     }
-    
     if( memberSum == 0){
         // 少数派没有人        
-       return 'no one win';
+       throw new Error("no one monority");
     }
     var every = (sum/memberSum).toFixed(4);
+    var transferFailed = [];
 
   	for(var i = 0;i < memberSum;i++){
-  		Blockchain.transfer(addressList[i], every);
-  	}
-
-  	this.jackpot -= sum;
-  	return JSON.stringify({
-          every:every,
-          addressList:addressList,
-      });
+          var res = Blockchain.transfer(addressList[i], every);
+          if(!res){ //转移失败
+            throw new Error("transfer failed.");
+          }
+      }
+    var _jackpot = this.jackpot;
+    this.jackpot =  _jackpot.sub(sum); 
+  	return 'success';
   },
 
   // 付过钱的用户
   memberList:function(){
-  	var list = [];
+    var list = [];
   	for(var i = 0; i < this.recordCounter;i++){
-  		list.push(this.mainBoard.get(i));
+        var item = this.mainBoard.get(i);
+        item.payMuch = this._convertBigNumber(item.payMuch);
+  		list.push(item);
   	}
   	return list;
   },
 
   getJackpot:function(){
-  	return this.jackpot;
+  	return this._convertBigNumber(this.jackpot);
   },
-
+  getJackpotOrigin:function(){
+    return this.jackpot;
+  },
   recordLength:function(){
   	return this.recordCounter;
   },
@@ -204,14 +204,20 @@ QuestionBoard.prototype = {
   },
   getCounterDate:function(){
       return this.counterDate;
-  }
-
+  },
+  getTime:function(){
+      return { day: this._getDay(), hour: this._getHour() };
+  },
+  _convertBigNumber:function(_num){
+    var num = Number(_num);
+    return (num/Number("1000000000000000000")).toFixed(3);
+},
  }
 
  module.exports = QuestionBoard;
 
  // mainnet:n1drkV289eit16xSpkhxc5oNe5h3XBMq8jk
- // testnet:n1pLXYPdHo8UrscUdUXKATWj6hSTEEZzLwY
+ // testnet:n1ugLGxqcEUjssVJ7TCsoywCYfLJ93JsViu
 
  //9z
  //eaebed510a9be18f757712aaaf047f8ac427bf74f944ded62c4df383ce673904

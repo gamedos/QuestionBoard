@@ -7,87 +7,215 @@
   <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
   <script type="text/javascript" src="lib/nebPay.js"></script> 
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
-<link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/iview/dist/styles/iview.css">
+    <script src="https://unpkg.com/iview/dist/iview.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
   
 </head>
 
 <body>
 
-  <div class="container">
-  <div class="header">
+  <div class="container" id="app">
+  <i-header>
     <h1>星云少数派</h1>
-  </div>
-  <div class="introduction">
+  </i-header>
+  <i-content>
+<Card>
+<div slot="title">
   <p>一道选择题,给你两个选择,你的选择是奇葩的还是大多数？</p>
-  <p>最低支付0.001NAS即可参与答题,答题时间为每日的0点至21点，21点以后统计a,b选项的人数，人数少的即为少数派，平均瓜分当日的所有奖金。人数相等则返还参与奖金。</p>
-  </div>
-<div class="statistic">
-  <div class="item">
-    <div class="num">5</div>
-    <div class="display">参与答题人数</div>
-  </div>
-   <div class="item">
-    <div class="num">0.005</div>
-    <div class="display">奖金数</div>
-  </div>
+  <p>参与规则:最低支付0.001NAS即可参与答题,21:00以后统计a,b选项的人数，人数少的即为少数派，平均瓜分当日的所有奖金。人数相等则返还参与奖金。</p>
+  <p>答题时间:每日0：00-21：00</p>
+  <p>开奖时间:每日21：00以后</p>
 </div>
-<div class="question">
-    hello world
-</div>
-<div class="options">
-  <div class="radio">
-  <label>
-    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-    Option one is this and that&mdash;be sure to include why it's great
-  </label>
-</div>
-<div class="radio">
-  <label>
-    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-    Option two can be something else and selecting it will deselect option one
-  </label>
-</div>
-</div>
-<div class="naslist">
-  <button type="button" class="btn btn-primary">参与</button>
-  <button type="button" class="btn btn-warning">领钱</button>
-<table class="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </table>
-</div>
- </div>
-  
-  <div>Made by kagawacaicai</div>
+    <div class="statistic">
+        <div class="item">
+            <p><h2>{{jackpot}}</h2></p>
+            <p>总奖金额</p>
+        </div>
+        <div class="item">
+            <p><h2>{{counter}}</h2></p>
+            <p>参与人数</p>
+        </div>
+        <div class="item">
+                <p><h2>{{day}}</h2></p>
+                <p>今日序号</p>
+        </div>
+    </div>
+</Card>
 
+<div class="question">
+  <Row>
+    <Col span="11" offset="2">
+        <Card shadow>
+            <p slot="title">爪哇犀牛还是印度黑羚</p>
+            <Radio-group v-model="selection">
+                <Radio label="a"><span>爪哇犀牛</span></Radio>
+                <Radio label="b"><span>印度黑羚</span></Radio>
+            </Radio-group>
+        </Card>
+    </Col>
+</Row>
+</div>
+
+<div class="naslist">
+  <i-button type="success" @click="pay">参与</i-button>
+  <i-button type="warning" @click="getBackClick">领钱</i-button>
+  <i-Table :columns="columns1" :data="members"></i-Table>
+</div>
+
+<Modal
+    v-model="webExtensionWalletShow"
+    title="您的浏览器不支持星云dapp!"
+    :mask-closable="false"
+    :closable="false">
+    <p>请先安装<a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a></p>
+    <p slot="footer"><a @click="reload">刷新</a></p>
+</Modal>
+
+</i-content>
+<i-footer>
+      <span>
+        <Avatar src="img/creabine.jpg" shape="square" size="large" />
+      </span>
+      <span>Author: kagawaCaicai</span>
+      <span>Created in 2018/5/7</span>
+  </i-footer>
+ </div>
+
+ <script>
+  var NebPay = require("nebpay");
+  var nebPay = new NebPay();
+  let vm = new Vue({
+    el: '#app',
+    data: {
+        dappAddress: "n1pR76TNoeMtLSd5hSX2ABdWVYUqDXGm4UN",
+        columns1: [
+                    {
+                        title: '支付地址',
+                        key: 'from'
+                    },
+                    {
+                        title: '日期',
+                        key: 'payDay'
+                    },
+                    {
+                        title: '支付金额',
+                        key: 'payMuch',
+                    }
+                ],
+            members: [],
+            day:'loading',
+            counter:'loading',
+            jackpot:'loading',
+            selection:'a',
+            webExtensionWalletShow:false,
+    },
+    mounted: function(){
+            if(this.walletCheck()){
+                this.initialize();
+            }
+        },
+    methods: {
+        walletCheck:function(){
+            if (typeof(webExtensionWallet) === "undefined") {
+                this.webExtensionWalletShow = true
+                return false;
+            }
+            return true;
+        },
+        getBackClick:function(){
+            // if(this.hour <21){
+            //     this.$Modal.success({
+            //         title: '',
+            //         content: '还没到开奖时候21:00哦，请耐心等待',
+            //         width: 600,
+            //     })
+            //     return;
+            // }
+            console.log('call get back');
+            var to = this.dappAddress;
+            var value = "0";
+            var callFunction = "participate";
+            var callArgs = [this.selection];
+            nebPay.call(to, value, callFunction, JSON.stringify(callArgs), {    //使用nebpay的call接口去调用合约,
+                listener: this.getBackNas
+            });
+        },
+        getBackNas:function(resp){
+            console.log(JSON.stringify(resp.result));
+        },
+        pay:function(){
+            if (typeof(webExtensionWallet) === "undefined") {
+                this.webExtensionWalletShow = true
+                return
+            }
+            var to = this.dappAddress;
+            var value = "0.001";
+            var callFunction = "participate";
+            var callArgs = [this.selection];
+            nebPay.call(to, value, callFunction, JSON.stringify(callArgs), {    //使用nebpay的call接口去调用合约,
+                listener: this.submitCb
+            });
+        },
+        submitCb:function(resp){
+            let _this = this;
+            this.$Modal.success({
+            title: '参与成功',
+            content: '新参与的用户需要进行区块确认，这可能会花费几十秒钟的时间。</br>你可以在<a href="https://wallet.nasscan.io/check.html" target="_blank">https://wallet.nasscan.io/check.html</a>中</br>使用<code>'+resp.txhash+'</code>查询进度！',
+            width: 600,
+            onOk:_this.initialize,
+            })
+        },
+        reload:function(){
+            window.location.reload()
+        },
+        convertBigNumber:function(_num){
+            var num = Number(_num);
+            return (num/Number("1000000000000000000")).toFixed(3);
+        },
+        initialize: function () {
+            var to = this.dappAddress;
+            var value = "0";
+            var callFunction = "getTime";
+
+            var callArgs = JSON.stringify([""])
+            var _this = this;
+            nebPay.simulateCall(to, value, callFunction, callArgs, {    //使用nebpay的simulateCall接口去执行get查询, 模拟执行.不发送交易,不上链
+                listener: function(resp){
+                    var result = resp.result;
+                    var resultObj = JSON.parse(result);
+                    _this.day = resultObj.day;  // initialize day and hour
+                    _this.hour = resultObj.hour;
+                }
+            });
+            callFunction = "memberList";
+            nebPay.simulateCall(to, value, callFunction, callArgs, {    
+                listener: function(resp){ 
+                    var result = resp.result;
+                    var resultObj = JSON.parse(result);
+                    _this.members = resultObj;
+                }
+            });
+            callFunction="getJackpot"
+            nebPay.simulateCall(to, value, callFunction, callArgs, {    
+                listener: function(resp){ // inittable
+                    var _num = resp.result.substring(1,resp.result.length-1);
+                    // _this.jackpot = _this.convertBigNumber(_num);
+                    _this.jackpot = Number(_num);
+                }   
+            });
+            callFunction="recordLength"
+            nebPay.simulateCall(to, value, callFunction, callArgs, {   
+                listener: function(resp){ // inittable
+                    var result = resp.result;
+                    _this.counter = result;
+                }   
+            });
+        },
+    }
+  });
+
+ </script>
 </body>
 
 </html>

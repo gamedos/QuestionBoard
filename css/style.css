@@ -14,9 +14,8 @@
 .statistic {
   display:flex;
 }
-
 .item {
-  
+  width:100px;
 }
 .naslist {
   
