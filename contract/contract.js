@@ -162,17 +162,17 @@ QuestionBoard.prototype = {
        throw new Error("no one monority");
     }
     var every = (sum/memberSum).toFixed(4);
-    var transferFailed = [];
 
   	for(var i = 0;i < memberSum;i++){
           var res = Blockchain.transfer(addressList[i], every);
-          if(!res){ //转移失败
+          if(!res){ //转账失败
             throw new Error("transfer failed.");
           }
       }
-    var _jackpot = this.jackpot;
-    this.jackpot =  _jackpot.sub(sum); 
-  	return 'success';
+    this.jackpot =  this.jackpot - sum; 
+    this._resetCounter(today);
+
+      return 'success';
   },
 
   // 付过钱的用户
@@ -181,6 +181,7 @@ QuestionBoard.prototype = {
   	for(var i = 0; i < this.recordCounter;i++){
         var item = this.mainBoard.get(i);
         item.payMuch = this._convertBigNumber(item.payMuch);
+        delete item.option;
   		list.push(item);
   	}
   	return list;
@@ -217,7 +218,7 @@ QuestionBoard.prototype = {
  module.exports = QuestionBoard;
 
  // mainnet:n1drkV289eit16xSpkhxc5oNe5h3XBMq8jk
- // testnet:n1ugLGxqcEUjssVJ7TCsoywCYfLJ93JsViu
+ // testnet:n1s8s31hFyZAN5HCHku439CAJYa3kaQwm1Z
 
  //9z
  //eaebed510a9be18f757712aaaf047f8ac427bf74f944ded62c4df383ce673904

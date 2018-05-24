@@ -5,7 +5,17 @@
   border:1px black solid;
   border-radius:20px;
   height:100px;
-  
+}
+
+.layout-logo{
+  width: 120px;
+  height: 30px;
+  border-radius: 3px;
+  float: left;
+  position: relative;
+  top: 15px;
+  left: 20px;
+  color: white;
 }
 .container {
   width:1200px;
@@ -17,6 +27,4 @@
 .item {
   width:100px;
 }
-.naslist {
-  
-}
+
