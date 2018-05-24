@@ -1,0 +1,23 @@
+.introduction {
+  text-align:center;
+  width:70%;
+  margin:0 auto;
+  border:1px black solid;
+  border-radius:20px;
+  height:100px;
+  
+}
+.container {
+  width:1200px;
+  margin:0 auto;
+}
+.statistic {
+  display:flex;
+}
+
+.item {
+  
+}
+.naslist {
+  
+}

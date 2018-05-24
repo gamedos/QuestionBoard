@@ -3,64 +3,90 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>A Pen by  bigcaicai90</title>
-  
-  
-  
-  
+  <title>星云少数派</title>
+  <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script type="text/javascript" src="lib/nebPay.js"></script> 
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
+<link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
   
 </head>
 
 <body>
 
-  <!DOCTYPE html>  
-<html>  
-<head>  
-<meta charset="UTF-8">  
-<title>星云少数派</title>  
-</head>  
+  <div class="container">
+  <div class="header">
+    <h1>星云少数派</h1>
+  </div>
+  <div class="introduction">
+  <p>一道选择题,给你两个选择,你的选择是奇葩的还是大多数？</p>
+  <p>最低支付0.001NAS即可参与答题,答题时间为每日的0点至21点，21点以后统计a,b选项的人数，人数少的即为少数派，平均瓜分当日的所有奖金。人数相等则返还参与奖金。</p>
+  </div>
+<div class="statistic">
+  <div class="item">
+    <div class="num">5</div>
+    <div class="display">参与答题人数</div>
+  </div>
+   <div class="item">
+    <div class="num">0.005</div>
+    <div class="display">奖金数</div>
+  </div>
+</div>
+<div class="question">
+    hello world
+</div>
+<div class="options">
+  <div class="radio">
+  <label>
+    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+    Option one is this and that&mdash;be sure to include why it's great
+  </label>
+</div>
+<div class="radio">
+  <label>
+    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+    Option two can be something else and selecting it will deselect option one
+  </label>
+</div>
+</div>
+<div class="naslist">
+  <button type="button" class="btn btn-primary">参与</button>
+  <button type="button" class="btn btn-warning">领钱</button>
+<table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+ </div>
   
-<body style="background-image:url(body.jpeg); background-size:100%; background-repeat: no-repeat;">  
-  
- <body>  
-    <div align="center"><img src="head2.jpg" /></div>  
-    <div  align="center">  
-    <h1>星云少数派</h1>  
-      <h2>早上起不了床怎么办</h2>
-        <table id="main" >  
-            <tr >  
-                <td>  
-                    <input type="radio" name="option" checked="checked"/>设定10个闹钟  
-                </td>  
-            </tr>  
-             
-            <tr>  
-                <td>  
-                    <input type="radio" name="option"  />强行冷水洗脸  
-                </td>  
-            </tr>  
-            
-            <tr >  
-                <td>  
-                    <input type="radio" name="option"  />每天自然醒 
-                </td>  
-            </tr>  
-            <tr >  
-                <td>  
-                    <div id=2 style="background-color:#ff7575; height:20px;width:0;  border-width:0px; border-color:blue; border-style:solid ; text-align:right;" ></div>  
-                      
-                </td> 
-            </tr>        
-            <tr>  
-                <td><p>  
-                    <input type="submit" value="确认投票" onclick="vote()"/>        
-                </td>  
-            </tr>  
-        </table>  
-    </div>  
-</body>
-  
-  
+  <div>Made by kagawacaicai</div>
 
 </body>
 
