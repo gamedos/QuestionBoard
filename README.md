@@ -1,8 +1,8 @@
-# QuestionBoard
+# 星云少数派
 
 这是一款通过选择题来分享nas的游戏。参与者投入0.001个NAS参与游戏做一道选择题有ab两个选项，每天晚上9时统计各个选项人数，人数少者获胜，瓜分当日的奖金。
 
- [星云少数派](https://nodejs.org/)(https://kagawa23.github.io/QuestionBoard/)
+ [星云少数派](https://kagawa23.github.io/QuestionBoard/)
 
  合约：
  
